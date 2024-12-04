@@ -157,4 +157,22 @@ Loading initial comms... please stand by...
                 if (input === '') return;
 
                 // Display user input as "guest"
-                commsTerminal.innerHTML += `<pre>[guest] > ${input}</pre
+                commsTerminal.innerHTML += `<pre>[guest] > ${input}</pre>`;
+                
+                // Simulate a hacker response
+                setTimeout(() => {
+                    if (input.toLowerCase() === 'hello') {
+                        commsTerminal.innerHTML += `<pre>[Comm #D5A2] > Who is this?</pre>`;
+                    } else if (input.includes("#")) {
+                        commsTerminal.innerHTML += `<pre>[Comm #B4F7] > Received hash: ${input}. Initiating data analysis...</pre>`;
+                    } else {
+                        commsTerminal.innerHTML += `<pre>[Comm #C1E3] > I don't understand. Please provide more details.</pre>`;
+                    }
+                    commsTerminal.scrollTop = commsTerminal.scrollHeight;  // Auto-scroll to latest chat
+                }, 1000);
+            }
+        });
+    </script>
+</body>
+</html>
+
