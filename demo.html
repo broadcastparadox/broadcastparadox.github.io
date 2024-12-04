@@ -1,158 +1,77 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terminal</title>
-    <style>
-        body {
-            background-color: #121212;
-            color: #00FF00;
-            font-family: 'Courier New', monospace;
-            padding: 20px;
-        }
-        .terminal {
-            border: 2px solid #00FF00;
-            padding: 20px;
-            height: 45vh;
-            overflow-y: scroll;
-            margin-bottom: 20px;
-        }
-        .terminal pre {
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
-        .terminal a {
-            color: #00FF00;
-            text-decoration: none;
-        }
-        #input-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        #user-input {
-            background-color: #121212;
-            border: 1px solid #00FF00;
-            color: #00FF00;
-            font-family: 'Courier New', monospace;
-            font-size: 16px;
-            width: 80%;
-            padding: 10px;
-        }
-    </style>
-</head>
-<body>
-    <h1>Terminal</h1>
-    <div class="terminal" id="terminal-output">
-        <pre>
-Loading comms... please stand by...
+/* General Page Styling */
+body {
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+    background-color: #121212;
+    color: #00FF00;  /* Green text for terminal-style look */
+    margin: 0;
+    padding: 0;
+}
 
-[2024-12-04 14:15:00] > Connection established to network.
-[2024-12-04 14:15:05] > Signal detected: [#983A] - Data stream: frequency stable.
-[2024-12-04 14:15:10] > Hash: #D45A9A Data anomaly confirmed. Attempting to decode...
-[2024-12-04 14:15:12] > Signal strength at 72%. Decryption ongoing...
-[2024-12-04 14:15:15] > Alert: Unknown modulation pattern detected. Anomaly detected in sector #72F9.
-[2024-12-04 14:15:18] > Data stream interrupted. Attempting reset...
+/* Logo and Favicon */
+link[rel="icon"] {
+    /* Ensure the favicon is displayed on the tab */
+    width: 16px;
+    height: 16px;
+}
 
-** New signal detected... Error. **
+/* Main Game Container */
+.game-container {
+    width: 80%;
+    margin: auto;
+}
 
---- [Accessing comms channel #A47D] ---
-</pre>
-    </div>
-    
-    <h2>Communications</h2>
-    <div class="terminal" id="comm-terminal">
-        
-    <h2>Input</h2>
-    <div id="input-container">
-        <input type="text" id="user-input" placeholder="Type your message here..." autofocus>
-    </div>
+/* Button Styling */
+button {
+    padding: 10px 20px;
+    background-color: #444;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+    color: #00FF00; /* Green button text */
+    font-size: 16px;
+    font-family: 'Courier New', Courier, monospace;
+}
 
-    <script>
-        let commsTerminal = document.getElementById('comm-terminal');
-        let terminalOutput = document.getElementById('terminal-output');
-        let userInput = document.getElementById('user-input');
+button:disabled {
+    background-color: #888;
+    color: #555;
+}
 
-        // Function to simulate the stream of radio data
-        function simulateRadioStream() {
-            let radioStream = [
-                "[2024-12-04 14:15:30] > Signal detected: [#983A] - Data stream stable.",
-                "[2024-12-04 14:15:35] > Hash: #D45A9A Data anomaly confirmed.",
-                "[2024-12-04 14:15:40] > Signal strength fluctuating. Error: Decryption failed.",
-                "[2024-12-04 14:15:45] > Frequency modulation detected. No decode available.",
-                "[2024-12-04 14:15:50] > Access granted to anomaly channel #72F9.",
-                "[2024-12-04 14:15:55] > Signal lost. Attempting reconnect."
-            ];
+/* Frequency Monitor, Decrypting, and Upgrades Sections */
+#frequency-monitor, #decrypting, #audio-clips, #upgrades {
+    margin-top: 30px;
+}
 
-            let randomIndex = Math.floor(Math.random() * radioStream.length);
-            terminalOutput.innerHTML += `<pre>${radioStream[randomIndex]}</pre>`;
-            terminalOutput.scrollTop = terminalOutput.scrollHeight;  // Auto-scroll to latest data
-        }
+#frequency-monitor h2, #decrypting h3, #audio-clips h3, #upgrades h3 {
+    font-size: 24px;
+}
 
-        // Simulate the hacker chat interaction with time delays
-        function simulateCommsDialogue() {
-            const dialogue = [
-                "[Comm #D5A2] > Who's out there? No one else has accessed this channel in weeks...",
-                "[Comm #B4F7] > It's me. I found something... but I can't decode it. It's a signal—too strong.",
-                "[Comm #C1E3] > Signal? What signal? Spill it.",
-                "[Comm #B4F7] > I can hear it. It's faint, but there. I'm not sure... could it be... extraterrestrial?",
-                "[Comm #D5A2] > Are you trying to tell me you're listening to alien transmissions? You're out of your mind.",
-                "[Comm #B4F7] > This... this isn't normal. Something's wrong. You need to check it out.",
-                "[Comm #C1E3] > I'm not chasing ghosts, man. Too many of these signals come and go.",
-                "[Comm #B4F7] > It's not like the others. The pattern, the hash... It's real.",
-                "[Comm #D5A2] > Fine. I'll bite. Send me the hash. Let's see if this is worth my time.",
-                "[Comm #B4F7] > Here it is... #9F2A37",
-                "[Comm #C1E3] > [Processing hash...] Damn. It's definitely something. I've never seen a pattern like that.",
-                "[Comm #B4F7] > You see it too? It's the one. The frequency's irregular. It's changing every few seconds. We need to decode it.",
-                "[Comm #D5A2] > Alright, alright. Let's get on it. I'll ping you in an hour with what I find.",
-                "[Comm #C1E3] > Hold on, you sure about this? We may not be able to crack it.",
-                "[Comm #B4F7] > We don't have a choice now. It's too late to back out.",
-                "[Comm #D5A2] > Fine. Let's see where this takes us."
-            ];
+/* Progress Bar */
+#decrypt-progress {
+    width: 100%;
+    height: 20px;
+    background-color: #444;
+    border: 2px solid #00FF00;
+}
 
-            let index = 0;
-            function sendMessage() {
-                if (index < dialogue.length) {
-                    commsTerminal.innerHTML += `<pre>${dialogue[index]}</pre>`;
-                    commsTerminal.scrollTop = commsTerminal.scrollHeight;  // Auto-scroll to latest chat
-                    index++;
-                    setTimeout(sendMessage, Math.random() * 3000 + 2000); // Random delay between 2 and 5 seconds
-                }
-            }
-            sendMessage();
-        }
+/* Audio Clips List */
+#clip-list {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 10px;
+}
 
-        // Simulate the chat starting immediately
-        simulateCommsDialogue();
+/* Anomaly Indicator */
+#anomaly-indicator {
+    font-size: 18px;
+    color: #FF0000;  /* Red for the anomaly message */
+    margin-top: 10px;
+}
 
-        // Simulate the radio stream continuously
-        setInterval(simulateRadioStream, 5000);  // Update every 5 seconds
-
-        // Handle user input in the chat
-        userInput.addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                let input = userInput.value;
-                userInput.value = '';
-
-                if (input === '') return;
-
-                // Display user input as "guest"
-                commsTerminal.innerHTML += `<pre>[guest] > ${input}</pre>`;
-                
-                // Simulate a hacker response
-                setTimeout(() => {
-                    if (input.toLowerCase() === 'hello') {
-                        commsTerminal.innerHTML += `<pre>[Comm #D5A2] > Who is this?</pre>`;
-                    } else if (input.includes("#")) {
-                        commsTerminal.innerHTML += `<pre>[Comm #B4F7] > Received hash: ${input}. Initiating data analysis...</pre>`;
-                    } else {
-                        commsTerminal.innerHTML += `<pre>[Comm #C1E3] > I don't understand. Please provide more details.</pre>`;
-                    }
-                    commsTerminal.scrollTop = commsTerminal.scrollHeight;  // Auto-scroll to latest chat
-                }, 1000);
-            }
-        });
-    </script>
-</body>
-</html>
+/* Decryption Time Remaining */
+#decrypt-time-left {
+    font-size: 18px;
+    color: #FFFF00;  /* Yellow for time left */
+    margin-top: 10px;
+}
