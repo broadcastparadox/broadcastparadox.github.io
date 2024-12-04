@@ -3,99 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Radio Station Data Terminal</title>
+    <title>Broadcast Paradox - Hacker Terminal</title>
     <style>
         body {
-            font-family: "Courier New", Courier, monospace;
-            margin: 0;
-            padding: 0;
-            background: #0a0f1b;
-            color: #4caf50;
+            background-color: #121212;
+            color: #00FF00;
+            font-family: 'Courier New', monospace;
+            padding: 20px;
         }
         .terminal {
-            background: #000;
-            color: #4caf50;
+            border: 2px solid #00FF00;
             padding: 20px;
-            border-radius: 8px;
-            margin: 20px auto;
+            height: 45vh;
+            overflow-y: scroll;
+            margin-bottom: 20px;
+        }
+        .terminal pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .terminal a {
+            color: #00FF00;
+            text-decoration: none;
+        }
+        #input-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #user-input {
+            background-color: #121212;
+            border: 1px solid #00FF00;
+            color: #00FF00;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
             width: 80%;
-            height: 400px;
-            overflow-y: auto;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
-        }
-        .terminal .line {
-            margin: 0;
-            white-space: nowrap;
-        }
-        footer {
-            text-align: center;
             padding: 10px;
-            background: #1b2735;
-            color: #f5f5f5;
-            font-size: 0.8em;
         }
     </style>
 </head>
 <body>
-    <div class="terminal" id="terminal">
-        <div class="line">Initializing terminal...</div>
+    <h1>Broadcast Paradox - Hacker Terminal</h1>
+    <div class="terminal" id="terminal-output">
+        <pre>
+Loading initial comms... please stand by...
+
+[2024-12-04 14:15:00] > Connection established to network.
+[2024-12-04 14:15:05] > Signal detected: [#983A] - Data stream: frequency stable.
+[2024-12-04 14:15:10] > Hash: #D45A9A Data anomaly confirmed. Attempting to decode...
+[2024-12-04 14:15:12] > Signal strength at 72%. Decryption ongoing...
+[2024-12-04 14:15:15] > Alert: Unknown modulation pattern detected. Anomaly detected in sector #72F9.
+[2024-12-04 14:15:18] > Data stream interrupted. Attempting reset...
+
+** New signal detected... Error. **
+
+--- [Accessing comms channel #A47D] ---
+</pre>
+    </div>
+    
+    <h2>Communications</h2>
+    <div class="terminal" id="comm-terminal">
+        <pre>
+[Comm #D5A2] > Who's out there? No one else has accessed this channel in weeks...
+[Comm #B4F7] > It's me. I found something... but I can't decode it. It's a signal—too strong.
+[Comm #C1E3] > Signal? What signal? Spill it.
+[Comm #B4F7] > I can hear it. It's faint, but there. I'm not sure... could it be... extraterrestrial?
+[Comm #D5A2] > Are you trying to tell me you're listening to alien transmissions? You're out of your mind.
+[Comm #B4F7] > This... this isn't normal. Something's wrong. You need to check it out.
+[Comm #C1E3] > I'm not chasing ghosts, man. Too many of these signals come and go.
+[Comm #B4F7] > It's not like the others. The pattern, the hash... It's real.
+[Comm #D5A2] > Fine. I'll bite. Send me the hash. Let's see if this is worth my time.
+[Comm #B4F7] > Here it is... #9F2A37
+</pre>
     </div>
 
-    <footer>
-        <p>&copy; 2024 The Broadcast Paradox Team. All rights reserved.</p>
-    </footer>
+    <h2>Input (Hack the system)</h2>
+    <div id="input-container">
+        <input type="text" id="user-input" placeholder="Type your message here..." autofocus>
+    </div>
 
     <script>
-        // Fictional radio stations
-        const stations = [
-            "Radio Alpha",
-            "Beta Waves",
-            "Gamma FM",
-            "Delta Hits",
-            "Epsilon Frequencies",
-            "Zeta Beats",
-            "Eta Broadcasting",
-            "Theta Airwaves",
-            "Iota Classics",
-            "Kappa Vibes"
-        ];
+        let commsTerminal = document.getElementById('comm-terminal');
+        let terminalOutput = document.getElementById('terminal-output');
+        let userInput = document.getElementById('user-input');
 
-        const terminal = document.getElementById("terminal");
+        // Function to simulate the stream of radio data
+        function simulateRadioStream() {
+            let radioStream = [
+                "[2024-12-04 14:15:30] > Signal detected: [#983A] - Data stream stable.",
+                "[2024-12-04 14:15:35] > Hash: #D45A9A Data anomaly confirmed.",
+                "[2024-12-04 14:15:40] > Signal strength fluctuating. Error: Decryption failed.",
+                "[2024-12-04 14:15:45] > Frequency modulation detected. No decode available.",
+                "[2024-12-04 14:15:50] > Access granted to anomaly channel #72F9.",
+                "[2024-12-04 14:15:55] > Signal lost. Attempting reconnect."
+            ];
 
-        // Simulate streaming data
-        function streamData() {
-            const timestamp = new Date().toISOString();
-            const station = stations[Math.floor(Math.random() * stations.length)];
-            const frequency = (Math.random() * (108.0 - 87.5) + 87.5).toFixed(1);
-            const signalStrength = (Math.random() * 100).toFixed(2);
-            const anomalyChance = Math.random();
-
-            let message = `[${timestamp}] Station: ${station} | Frequency: ${frequency} MHz | Signal Strength: ${signalStrength}%`;
-
-            if (anomalyChance < 0.01) {
-                message += " | ANOMALY DETECTED: Signal Disruption";
-            }
-
-            const line = document.createElement("div");
-            line.className = "line";
-            line.textContent = message;
-            terminal.appendChild(line);
-
-            // Scroll to the bottom
-            terminal.scrollTop = terminal.scrollHeight;
-
-            // Continue streaming
-            setTimeout(streamData, Math.random() * 500 + 200); // Random delay between 200ms and 700ms
+            let randomIndex = Math.floor(Math.random() * radioStream.length);
+            terminalOutput.innerHTML += `<pre>${radioStream[randomIndex]}</pre>`;
+            terminalOutput.scrollTop = terminalOutput.scrollHeight;  // Auto-scroll to latest data
         }
 
-        // Start streaming data
-        setTimeout(() => {
-            const initLine = document.createElement("div");
-            initLine.className = "line";
-            initLine.textContent = "Streaming data from fictional radio stations...";
-            terminal.appendChild(initLine);
-            streamData();
-        }, 1000);
+        // Simulate the hacker chat interaction
+        userInput.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                let input = userInput.value;
+                userInput.value = '';
+
+                if (input === '') return;
+
+                // Display user input as "guest"
+                commsTerminal.innerHTML += `<pre>[guest] > ${input}</pre>`;
+                
+                // Simulate a hacker response
+                setTimeout(() => {
+                    if (input.toLowerCase() === 'hello') {
+                        commsTerminal.innerHTML += `<pre>[Comm #D5A2] > Who is this?</pre>`;
+                    } else if (input.includes("#")) {
+                        commsTerminal.innerHTML += `<pre>[Comm #B4F7] > Received hash: ${input}. Initiating data analysis...</pre>`;
+                    } else {
+                        commsTerminal.innerHTML += `<pre>[Comm #C1E3] > I don't understand. Please provide more details.</pre>`;
+                    }
+                    commsTerminal.scrollTop = commsTerminal.scrollHeight;  // Auto-scroll to latest chat
+                }, 1000);
+            }
+        });
+
+        // Start simulating radio stream
+        setInterval(simulateRadioStream, 5000);  // Update every 5 seconds
     </script>
 </body>
 </html>
