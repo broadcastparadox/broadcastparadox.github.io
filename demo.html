@@ -1,77 +1,201 @@
-/* General Page Styling */
-body {
-    font-family: 'Courier New', Courier, monospace;
-    text-align: center;
-    background-color: #121212;
-    color: #00FF00;  /* Green text for terminal-style look */
-    margin: 0;
-    padding: 0;
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radio Station Hacking Simulation</title>
+    <link rel="icon" href="logo.png" type="image/png">  <!-- Add the logo as favicon -->
 
-/* Logo and Favicon */
-link[rel="icon"] {
-    /* Ensure the favicon is displayed on the tab */
-    width: 16px;
-    height: 16px;
-}
+    <style>
+        /* General Page Styling */
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            text-align: center;
+            background-color: #121212;
+            color: #00FF00;  /* Green text for terminal-style look */
+            margin: 0;
+            padding: 0;
+        }
 
-/* Main Game Container */
-.game-container {
-    width: 80%;
-    margin: auto;
-}
+        /* Logo and Favicon */
+        link[rel="icon"] {
+            /* Ensure the favicon is displayed on the tab */
+            width: 16px;
+            height: 16px;
+        }
 
-/* Button Styling */
-button {
-    padding: 10px 20px;
-    background-color: #444;
-    border: none;
-    cursor: pointer;
-    margin-top: 20px;
-    color: #00FF00; /* Green button text */
-    font-size: 16px;
-    font-family: 'Courier New', Courier, monospace;
-}
+        /* Main Game Container */
+        .game-container {
+            width: 80%;
+            margin: auto;
+        }
 
-button:disabled {
-    background-color: #888;
-    color: #555;
-}
+        /* Button Styling */
+        button {
+            padding: 10px 20px;
+            background-color: #444;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+            color: #00FF00; /* Green button text */
+            font-size: 16px;
+            font-family: 'Courier New', Courier, monospace;
+        }
 
-/* Frequency Monitor, Decrypting, and Upgrades Sections */
-#frequency-monitor, #decrypting, #audio-clips, #upgrades {
-    margin-top: 30px;
-}
+        button:disabled {
+            background-color: #888;
+            color: #555;
+        }
 
-#frequency-monitor h2, #decrypting h3, #audio-clips h3, #upgrades h3 {
-    font-size: 24px;
-}
+        /* Frequency Monitor, Decrypting, and Upgrades Sections */
+        #frequency-monitor, #decrypting, #audio-clips, #upgrades {
+            margin-top: 30px;
+        }
 
-/* Progress Bar */
-#decrypt-progress {
-    width: 100%;
-    height: 20px;
-    background-color: #444;
-    border: 2px solid #00FF00;
-}
+        #frequency-monitor h2, #decrypting h3, #audio-clips h3, #upgrades h3 {
+            font-size: 24px;
+        }
 
-/* Audio Clips List */
-#clip-list {
-    list-style-type: none;
-    padding: 0;
-    margin-top: 10px;
-}
+        /* Progress Bar */
+        #decrypt-progress {
+            width: 100%;
+            height: 20px;
+            background-color: #444;
+            border: 2px solid #00FF00;
+        }
 
-/* Anomaly Indicator */
-#anomaly-indicator {
-    font-size: 18px;
-    color: #FF0000;  /* Red for the anomaly message */
-    margin-top: 10px;
-}
+        /* Audio Clips List */
+        #clip-list {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 10px;
+        }
 
-/* Decryption Time Remaining */
-#decrypt-time-left {
-    font-size: 18px;
-    color: #FFFF00;  /* Yellow for time left */
-    margin-top: 10px;
-}
+        /* Anomaly Indicator */
+        #anomaly-indicator {
+            font-size: 18px;
+            color: #FF0000;  /* Red for the anomaly message */
+            margin-top: 10px;
+        }
+
+        /* Decryption Time Remaining */
+        #decrypt-time-left {
+            font-size: 18px;
+            color: #FFFF00;  /* Yellow for time left */
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Radio Station Hacking Simulation</h1>
+
+        <div id="frequency-monitor">
+            <h2>Monitoring Frequencies...</h2>
+            <div id="anomaly-indicator">No Anomalies Detected</div>
+            <button id="start-decryption" disabled>Start Decrypting</button>
+        </div>
+
+        <div id="decrypting">
+            <h3>Decrypting Audio</h3>
+            <progress id="decrypt-progress" value="0" max="100"></progress>
+            <div id="decrypt-time-left">Time Remaining: 0s</div>
+        </div>
+
+        <div id="audio-clips">
+            <h3>Unlocked Audio Clips</h3>
+            <ul id="clip-list">
+                <!-- Audio clips will appear here -->
+            </ul>
+        </div>
+
+        <div id="upgrades">
+            <h3>Upgrades</h3>
+            <button id="upgrade-decryption" disabled>Upgrade Decryption Speed</button>
+        </div>
+    </div>
+
+    <script>
+        // Variables for managing the game state
+        let anomalyDetected = false;
+        let decryptionInProgress = false;
+        let decryptionTime = 10;  // Time to decrypt (in seconds)
+        let audioClipsUnlocked = 0;
+        let decryptionSpeed = 1000;  // Time in ms for each decryption step
+        let upgradeCost = 1000;  // Cost for upgrading decryption speed
+        let currency = 0;  // Currency for upgrades
+
+        // DOM elements
+        const anomalyIndicator = document.getElementById('anomaly-indicator');
+        const startDecryptionButton = document.getElementById('start-decryption');
+        const decryptProgress = document.getElementById('decrypt-progress');
+        const decryptTimeLeft = document.getElementById('decrypt-time-left');
+        const clipList = document.getElementById('clip-list');
+        const upgradeButton = document.getElementById('upgrade-decryption');
+
+        // Function to simulate anomaly detection (random chance)
+        function detectAnomaly() {
+            if (Math.random() < 0.1 && !anomalyDetected) {  // 10% chance to detect anomaly
+                anomalyDetected = true;
+                anomalyIndicator.innerText = 'Anomaly Detected! Start Decrypting.';
+                startDecryptionButton.disabled = false;
+            }
+        }
+
+        // Function to start the decryption process
+        function startDecryption() {
+            anomalyDetected = false;
+            startDecryptionButton.disabled = true;
+            decryptionInProgress = true;
+            let progress = 0;
+            let decryptInterval = setInterval(() => {
+                progress += 10;
+                decryptProgress.value = progress;
+                decryptTimeLeft.innerText = `Time Remaining: ${Math.max(0, decryptionTime - (progress / 10))}s`;
+
+                if (progress >= 100) {
+                    clearInterval(decryptInterval);
+                    unlockAudioClip();
+                    decryptionInProgress = false;
+                    detectAnomaly();
+                }
+            }, decryptionSpeed);
+        }
+
+        // Function to unlock a new audio clip
+        function unlockAudioClip() {
+            audioClipsUnlocked++;
+            let newClip = document.createElement('li');
+            newClip.innerText = `Audio Clip ${audioClipsUnlocked}`;
+            clipList.appendChild(newClip);
+
+            if (audioClipsUnlocked === 10) {
+                alert("All audio clips unlocked! You've completed the game!");
+            }
+        }
+
+        // Upgrade decryption speed
+        function upgradeDecryptionSpeed() {
+            if (currency >= upgradeCost) {
+                currency -= upgradeCost;
+                decryptionSpeed -= 200;  // Speed up the decryption process
+                upgradeCost *= 2;  // Increase upgrade cost for the next upgrade
+                upgradeButton.innerText = `Upgrade Decryption Speed (Cost: ${upgradeCost})`;
+            }
+        }
+
+        // Function to simulate idle game progression
+        function gameLoop() {
+            detectAnomaly();
+            setTimeout(gameLoop, 5000);  // Check for anomalies every 5 seconds
+        }
+
+        // Start the game loop when the page is loaded
+        window.onload = () => {
+            gameLoop();
+            startDecryptionButton.addEventListener('click', startDecryption);
+            upgradeButton.addEventListener('click', upgradeDecryptionSpeed);
+        };
+    </script>
+</body>
+</html>
