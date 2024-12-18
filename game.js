@@ -1,9 +1,9 @@
 let ids = [];
-let anomalyChance = 0.01; // 1% chance for anomaly
+let anomalyChance = 0.01; // 1% chance for anomaly, this can be updated later
 let isCooldown = false;  // Flag to track cooldown state
 
 // Load the CSV file using PapaParse
-Papa.parse('https://raw.githubusercontent.com/broadcastparadox/broadcastparadox.github.io/main/ids.csv', {  // Ensure the path points to the correct location of your CSV
+Papa.parse('https://raw.githubusercontent.com/broadcastparadox/broadcastparadox.github.io/main/ids.csv', {
   download: true,
   complete: function(results) {
     ids = results.data.map(row => row[0]); // Assuming IDs are in the first column of the CSV
@@ -32,11 +32,15 @@ function scan() {
   isCooldown = true;
 
   const terminal = document.getElementById('terminal');
-  terminal.innerHTML = `Scanning for anomalies...\n`; // Replace the text
+  terminal.innerHTML = `Scanning for anomalies...\n`; // Replace the text with the initial scan message
 
+  // Select a random ID
   const randomId = ids[Math.floor(Math.random() * ids.length)];
-  const isAnomaly = Math.random() < anomalyChance; // 1% chance of anomaly
 
+  // Determine if it's an anomaly based on the anomaly chance
+  const isAnomaly = Math.random() < anomalyChance;
+
+  // Update the terminal with the result
   if (isAnomaly) {
     terminal.innerHTML = `Anomaly detected in ID: ${randomId}\n`;
   } else {
@@ -47,4 +51,10 @@ function scan() {
   setTimeout(function() {
     isCooldown = false;  // Cooldown finished
   }, 30000); // 30 seconds cooldown
+}
+
+// Function to update the anomaly chance dynamically
+function setAnomalyChance(newChance) {
+  anomalyChance = newChance;
+  console.log(`Anomaly chance updated to: ${anomalyChance * 100}%`);
 }
