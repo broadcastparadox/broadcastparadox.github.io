@@ -1,79 +1,60 @@
-const output = document.getElementById("output");
-const progressBar = document.getElementById("progress-bar");
-const startScanButton = document.getElementById("start-scan");
-
-// Sound effects
-const soundStart = new Audio("soundeffect_start.mp3");
-const soundAnomaly = new Audio("soundeffect_anomaly.mp3");
-const soundNone = new Audio("soundeffect_none.mp3");
-
-// Simulation configuration
-const gibberish = [
-    "Loading data packets...",
-    "Analyzing bandwidth...",
-    "Decrypting signal pathways...",
-    "Processing node 742-A...",
-    "Connection reset detected.",
-    "Compiling threat vectors...",
-    "Verification timeout..."
+// Array of unique IDs to be pulled
+const uniqueIDs = [
+    "Ui5gZs8P8vOPL5B3", "xRygw4s097VG7eck", "gEGo1YOrT7l2e4Ol", "puPzygdhaXEplmjB",
+    "mB8r9nlNeCBC3fLr", "vUlle8bHBkBYXiRT", "ugeB8tyb0zwnjzYN", "2zRzEz0EkvFZaqEy",
+    "F1DtA5arRNdtLZy3", "JxLTy8o2vZXBq8qX", "gYrjr31fjtQf9crE", "m9nZOOgYbjQ86i7g",
+    "UvVV9QULJhnTCsyy", "aXppvVBxyDkg7EG4", "TCwauUUlpP9weywC", "Kzo8GjIBddI01goj",
+    "oc5WhZAJceZwEoUq", "Zq1o1MV13rPnZhes", "MY4T2uwSspCjWBwd", "MWgrzGWFK6fgm3Ie"
+    // Add the rest of your IDs here...
 ];
-const scanTime = 30 * 1000; // 30 seconds
-let uniqueIDs = [];
 
-// Load IDs from JSON
-fetch("ids.json")
-    .then(response => response.json())
-    .then(data => {
-        uniqueIDs = data;
-    })
-    .catch(err => {
-        logMessage("Error loading IDs. Check ids.json file.");
-        console.error(err);
-    });
+// Audio files (Make sure to add the actual mp3 files)
+const startScanSound = new Audio('soundeffect_start.mp3');
+const anomalyFoundSound = new Audio('soundeffect_anomaly.mp3');
+const noAnomalySound = new Audio('soundeffect_no_anomaly.mp3');
 
-function logMessage(message) {
-    const timestamp = new Date().toLocaleTimeString();
-    output.innerHTML += `<div>[${timestamp}] ${message}</div>`;
-    output.scrollTop = output.scrollHeight;
+// Function to generate random anomaly detection with 0.5% chance
+function getRandomID() {
+    const randomIndex = Math.floor(Math.random() * uniqueIDs.length);
+    const randomID = uniqueIDs[randomIndex];
+    const isAnomaly = Math.random() < 0.005; // 0.5% chance for anomaly
+
+    return { id: randomID, anomaly: isAnomaly };
 }
 
+// Start scan function
 function startScan() {
-    // Disable button during scan
-    startScanButton.disabled = true;
+    const outputElement = document.getElementById("output");
 
-    logMessage("Starting scan...");
-    soundStart.play();
+    // Play scan start sound
+    startScanSound.play();
 
-    let progress = 0;
-    const interval = setInterval(() => {
-        progress += 100 / (scanTime / 100);
-        progressBar.style.width = `${progress}%`;
+    outputElement.textContent += "\n[Scanning for anomalies...]\n";
+    outputElement.scrollTop = outputElement.scrollHeight;
 
-        if (progress >= 100) {
-            clearInterval(interval);
-            checkAnomaly();
-            progressBar.style.width = "0%";
-            startScanButton.disabled = false;
+    setTimeout(() => {
+        // Check for anomalies after 30 seconds
+        const result = getRandomID();
+        const timestamp = new Date().toLocaleTimeString();
+
+        if (result.anomaly) {
+            // Anomaly found, display ID and message
+            outputElement.textContent += `[${timestamp}] Anomaly detected!\nUnique ID: ${result.id}\n`;
+            outputElement.scrollTop = outputElement.scrollHeight;
+            anomalyFoundSound.play();
         } else {
-            logMessage(randomGibberish());
+            // No anomaly found
+            outputElement.textContent += `[${timestamp}] Scan completed. No anomalies found.\n`;
+            outputElement.scrollTop = outputElement.scrollHeight;
+            noAnomalySound.play();
         }
-    }, 100);
+
+        // Trigger another scan after a delay (you can adjust this time)
+        startScan();
+    }, 30000); // 30 seconds interval
 }
 
-function checkAnomaly() {
-    if (Math.random() <= 0.005 && uniqueIDs.length > 0) { // 0.5% chance
-        const anomalyID = uniqueIDs.pop();
-        soundAnomaly.play();
-        logMessage("--- ANOMALY DETECTED ---");
-        logMessage(`Unique ID: ${anomalyID}`);
-    } else {
-        soundNone.play();
-        logMessage("Scan complete. No anomalies detected.");
-    }
-}
-
-function randomGibberish() {
-    return gibberish[Math.floor(Math.random() * gibberish.length)];
-}
-
-startScanButton.addEventListener("click", startScan);
+// Event listener for the scan button
+document.getElementById("scanButton").addEventListener("click", function() {
+    startScan();
+});
