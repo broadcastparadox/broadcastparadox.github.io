@@ -3,18 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Random ID Picker</title>
+    <title>Unique ID Picker Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #fff;
+            text-align: center;
+        }
+        #output {
+            font-size: 1.5em;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #333;
+            border-radius: 10px;
+        }
+        #anomalyOutput {
+            font-size: 1.3em;
+            color: #FF0000;
+            margin-top: 10px;
+        }
+    </style>
     <script src="unique_ids.js" defer></script>
 </head>
 <body>
-    <h1>Random Unique ID Generator</h1>
-    <button id="generateIDButton">Get Random ID</button>
-    <p id="idDisplay">Your random ID will appear here.</p>
+    <h1>Find the Anomaly</h1>
+    <p>Click the button to grab a random ID.</p>
+    <button id="generateIDButton">Generate Random ID</button>
+
+    <div id="output">Your random ID will appear here.</div>
+    <div id="anomalyOutput"></div>
 
     <script>
         document.getElementById("generateIDButton").addEventListener("click", function() {
-            const randomID = getRandomID();
-            document.getElementById("idDisplay").textContent = "Random ID: " + randomID;
+            const result = getRandomID();
+            const idDisplay = document.getElementById("output");
+            const anomalyDisplay = document.getElementById("anomalyOutput");
+
+            // Display the picked ID
+            idDisplay.textContent = "Random ID: " + result.id;
+
+            // Check if the ID is an anomaly
+            if (result.anomaly) {
+                anomalyDisplay.textContent = "Anomaly detected! Something strange happened.";
+            } else {
+                anomalyDisplay.textContent = "";
+            }
         });
     </script>
 </body>
