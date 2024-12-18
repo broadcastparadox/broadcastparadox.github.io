@@ -1,3 +1,4 @@
+// The array containing unique IDs
 const uniqueIDs = [
     "Ui5gZs8P8vOPL5B3",
     "xRygw4s097VG7eck",
@@ -18,10 +19,20 @@ const uniqueIDs = [
     "oc5WhZAJceZwEoUq",
     "Zq1o1MV13rPnZhes",
     "MY4T2uwSspCjWBwd",
-    // ... (Add the remaining IDs here)
+    // ... Add remaining IDs here
 ];
 
+// Function to randomly pick an ID and check for an anomaly
 function getRandomID() {
     const randomIndex = Math.floor(Math.random() * uniqueIDs.length);
-    return uniqueIDs[randomIndex];
+    const randomID = uniqueIDs[randomIndex];
+
+    // 0.5% chance of triggering an anomaly
+    const isAnomaly = Math.random() < 0.005;
+
+    if (isAnomaly) {
+        return { id: randomID, anomaly: true };
+    } else {
+        return { id: randomID, anomaly: false };
+    }
 }
