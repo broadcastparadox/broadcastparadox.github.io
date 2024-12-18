@@ -3,17 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anomaly Tracker</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Random ID Picker</title>
+    <script src="unique_ids.js" defer></script>
 </head>
 <body>
-    <div class="terminal">
-        <div id="output"></div>
-        <div class="progress-container">
-            <div id="progress-bar"></div>
-        </div>
-        <button id="start-scan">Start Scan</button>
-    </div>
-    <script src="script.js"></script>
+    <h1>Random Unique ID Generator</h1>
+    <button id="generateIDButton">Get Random ID</button>
+    <p id="idDisplay">Your random ID will appear here.</p>
+
+    <script>
+        document.getElementById("generateIDButton").addEventListener("click", function() {
+            const randomID = getRandomID();
+            document.getElementById("idDisplay").textContent = "Random ID: " + randomID;
+        });
+    </script>
 </body>
 </html>
