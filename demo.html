@@ -1,43 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terminal Hacking Simulation</title>
-    <style>
-        body {
-            font-family: "Courier New", Courier, monospace;
-            background-color: #121212;
-            color: #00FF00;
-            text-align: center;
-        }
-        #output {
-            white-space: pre-wrap;
-            width: 80%;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #333;
-            border-radius: 10px;
-            height: 400px;
-            overflow-y: scroll;
-            font-size: 1em;
-        }
-        #scanButton {
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 1.2em;
-            background-color: #333;
-            color: #00FF00;
-            border: none;
-            cursor: pointer;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Broadcast Paradox</title>
+  <style>
+    body {
+      font-family: 'Courier New', Courier, monospace;
+      background-color: black;
+      color: green;
+      padding: 20px;
+    }
+    #terminal {
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      font-size: 18px;
+    }
+  </style>
 </head>
 <body>
-    <h1>Hacking Simulation</h1>
-    <button id="scanButton">Start Scan</button>
-    <div id="output"></div>
+  <h1>The Broadcast Paradox</h1>
+  <div id="terminal"></div>
+  <button onclick="scan()">Scan for Anomalies</button>
 
-    <script src="script.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+  <script src="game.js"></script>
 </body>
 </html>
