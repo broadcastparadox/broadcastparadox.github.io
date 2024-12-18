@@ -5,13 +5,13 @@ const uniqueIDs = [
     "F1DtA5arRNdtLZy3", "JxLTy8o2vZXBq8qX", "gYrjr31fjtQf9crE", "m9nZOOgYbjQ86i7g",
     "UvVV9QULJhnTCsyy", "aXppvVBxyDkg7EG4", "TCwauUUlpP9weywC", "Kzo8GjIBddI01goj",
     "oc5WhZAJceZwEoUq", "Zq1o1MV13rPnZhes", "MY4T2uwSspCjWBwd", "MWgrzGWFK6fgm3Ie"
-    // Add the rest of your IDs here...
+    // Add more unique IDs as needed
 ];
 
 // Audio files (Make sure to add the actual mp3 files)
-const startScanSound = new Audio('soundeffect_start.mp3');
-const anomalyFoundSound = new Audio('soundeffect_anomaly.mp3');
-const noAnomalySound = new Audio('soundeffect_no_anomaly.mp3');
+//const startScanSound = new Audio('soundeffect_start.mp3');
+//const anomalyFoundSound = new Audio('soundeffect_anomaly.mp3');
+//const noAnomalySound = new Audio('soundeffect_no_anomaly.mp3');
 
 // Function to generate random anomaly detection with 0.5% chance
 function getRandomID() {
