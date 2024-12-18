@@ -3,53 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unique ID Picker Game</title>
+    <title>Terminal Hacking Simulation</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: "Courier New", Courier, monospace;
             background-color: #121212;
-            color: #fff;
+            color: #00FF00;
             text-align: center;
         }
         #output {
-            font-size: 1.5em;
-            margin-top: 20px;
+            white-space: pre-wrap;
+            width: 80%;
+            margin: 0 auto;
             padding: 20px;
             background-color: #333;
             border-radius: 10px;
+            height: 400px;
+            overflow-y: scroll;
+            font-size: 1em;
         }
-        #anomalyOutput {
-            font-size: 1.3em;
-            color: #FF0000;
-            margin-top: 10px;
+        #scanButton {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            background-color: #333;
+            color: #00FF00;
+            border: none;
+            cursor: pointer;
         }
     </style>
-    <script src="unique_ids.js" defer></script>
 </head>
 <body>
-    <h1>Find the Anomaly</h1>
-    <p>Click the button to grab a random ID.</p>
-    <button id="generateIDButton">Generate Random ID</button>
+    <h1>Hacking Simulation</h1>
+    <button id="scanButton">Start Scan</button>
+    <div id="output"></div>
 
-    <div id="output">Your random ID will appear here.</div>
-    <div id="anomalyOutput"></div>
-
-    <script>
-        document.getElementById("generateIDButton").addEventListener("click", function() {
-            const result = getRandomID();
-            const idDisplay = document.getElementById("output");
-            const anomalyDisplay = document.getElementById("anomalyOutput");
-
-            // Display the picked ID
-            idDisplay.textContent = "Random ID: " + result.id;
-
-            // Check if the ID is an anomaly
-            if (result.anomaly) {
-                anomalyDisplay.textContent = "Anomaly detected! Something strange happened.";
-            } else {
-                anomalyDisplay.textContent = "";
-            }
-        });
-    </script>
+    <script src="script.js" defer></script>
 </body>
 </html>
