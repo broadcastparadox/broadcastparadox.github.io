@@ -15,6 +15,23 @@
       white-space: pre-wrap;
       word-wrap: break-word;
       font-size: 18px;
+      max-height: 80vh;
+      overflow-y: auto;
+      border: 1px solid green;
+      padding: 10px;
+    }
+    button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: black;
+      color: green;
+      border: 1px solid green;
+    }
+    button:hover {
+      background-color: green;
+      color: black;
     }
   </style>
 </head>
@@ -23,7 +40,56 @@
   <div id="terminal"></div>
   <button onclick="scan()">Scan for Anomalies</button>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-  <script src="game.js"></script>
+  <script>
+    const terminal = document.getElementById("terminal");
+
+    // Function to append text to the terminal
+    function logToTerminal(message) {
+      const timestamp = `[${new Date().toLocaleTimeString()}]`;
+      terminal.textContent += `${timestamp} ${message}\n`;
+      terminal.scrollTop = terminal.scrollHeight; // Auto-scroll
+    }
+
+    // Mock commands and their outputs
+    const commands = [
+      { command: "CONNECTING TO NETWORK", output: "Connection established..." },
+      { command: "SCANNING FREQUENCY RANGE 88.1-107.9 MHz", output: "No interference detected..." },
+      { command: "DECODING SIGNAL PATTERNS", output: "Anomaly detected at 92.3 MHz" },
+      { command: "ANALYZING ENCRYPTION LEVEL", output: "Encryption bypassed. Extracting metadata..." },
+      { command: "PARSING DATA", output: "Unknown broadcast identified: '##SIGIL2024##'" },
+    ];
+
+    const randomMessages = [
+      "SIGNAL LOSS DETECTED. RETRYING...",
+      "NO ANOMALIES IN RANGE. SCAN COMPLETE.",
+      "AMPLIFYING SIGNAL STRENGTH...",
+      "NOISE LEVELS: LOW",
+      "TRANSMISSION LOGGED.",
+    ];
+
+    // Function to simulate a scan
+    function scan() {
+      logToTerminal(">>> INITIATING SCAN...");
+      commands.forEach((cmd, index) => {
+        setTimeout(() => {
+          logToTerminal(`>>> ${cmd.command}`);
+          setTimeout(() => {
+            logToTerminal(cmd.output);
+          }, 1000);
+        }, index * 2000);
+      });
+
+      // Random filler messages
+      setTimeout(() => {
+        for (let i = 0; i < 3; i++) {
+          setTimeout(() => {
+            const randomMessage =
+              randomMessages[Math.floor(Math.random() * randomMessages.length)];
+            logToTerminal(randomMessage);
+          }, 6000 + i * 1000);
+        }
+      }, commands.length * 2000);
+    }
+  </script>
 </body>
 </html>
