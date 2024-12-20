@@ -69,7 +69,7 @@
     function updateCountdown() {
       const now = new Date();
       const nextPayout = new Date(now);
-      nextPayout.setHours(3, 33, 0, 0); // Set to 3:33 AM PST
+      nextPayout.setHours(11, 33, 0, 0); 
 
       if (now >= nextPayout) {
         // If the current time has passed today's 3:33 AM, set to tomorrow
