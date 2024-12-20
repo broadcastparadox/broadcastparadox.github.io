@@ -40,8 +40,10 @@
   <div id="terminal"></div>
   <button onclick="scan()">Scan for Anomalies</button>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
   <script>
     const terminal = document.getElementById("terminal");
+    let uniqueIDs = []; // Array to hold IDs from the CSV file
 
     // Function to append text to the terminal
     function logToTerminal(message) {
@@ -50,18 +52,26 @@
       terminal.scrollTop = terminal.scrollHeight; // Auto-scroll
     }
 
-    // List of unique IDs
-    const uniqueIDs = [
-      "ID-8A7F12B3",
-      "ID-4C2E98D7",
-      "ID-B1D4F67A",
-      "ID-3F89AC02",
-      "ID-6D7E2A94",
-      "ID-AF349821",
-    ];
+    // Function to load IDs from the CSV file
+    function loadIDs() {
+      Papa.parse("ids.csv", {
+        download: true,
+        header: false,
+        complete: function(results) {
+          uniqueIDs = results.data.map(row => row[0]).filter(id => id); // Get first column
+          logToTerminal(">>> IDs loaded successfully.");
+        },
+        error: function() {
+          logToTerminal("Error loading IDs from ids.csv.");
+        },
+      });
+    }
 
-    // Function to get a random unique ID
+    // Function to get a random unique ID from the loaded list
     function getRandomID() {
+      if (uniqueIDs.length === 0) {
+        return "No IDs available.";
+      }
       return uniqueIDs[Math.floor(Math.random() * uniqueIDs.length)];
     }
 
@@ -89,7 +99,9 @@
         }, 2000);
       }, 1000);
     }
+
+    // Load the IDs from the CSV file on page load
+    window.onload = loadIDs;
   </script>
 </body>
 </html>
-
