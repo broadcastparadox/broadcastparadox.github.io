@@ -45,6 +45,18 @@
     const terminal = document.getElementById("terminal");
     let uniqueIDs = []; // Array to hold IDs from the CSV file
 
+    // Background Music
+    const backgroundMusic = new Audio("loopme.mp3");
+    backgroundMusic.loop = true; // Loop the music
+    backgroundMusic.volume = 0.5; // Adjust volume (0.0 to 1.0)
+
+    // Function to play a random anomaly sound
+    function playRandomAnomalySound() {
+      const soundIndex = Math.floor(Math.random() * 8) + 1; // Random number between 1 and 8
+      const anomalySound = new Audio(`${soundIndex}.wav`);
+      anomalySound.play();
+    }
+
     // Function to append text to the terminal
     function logToTerminal(message) {
       const timestamp = `[${new Date().toLocaleTimeString()}]`;
@@ -88,6 +100,7 @@
             setTimeout(() => {
               if (hasAnomaly) {
                 logToTerminal("Anomaly Detected!");
+                playRandomAnomalySound(); // Play random sound
                 setTimeout(() => {
                   logToTerminal(`Unique Broadcast ID: ${getRandomID()}`);
                 }, 1000);
@@ -100,8 +113,18 @@
       }, 1000);
     }
 
-    // Load the IDs from the CSV file on page load
-    window.onload = loadIDs;
+    // Load the IDs from the CSV file and play background music on page load
+    window.onload = function() {
+      loadIDs(); // Load IDs as before
+      backgroundMusic.play().catch(() => {
+        logToTerminal(">>> Click anywhere to enable audio.");
+      });
+
+      // Allow music playback after user interaction if autoplay is blocked
+      document.body.addEventListener("click", () => {
+        backgroundMusic.play();
+      });
+    };
   </script>
 </body>
 </html>
