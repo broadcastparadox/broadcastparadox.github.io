@@ -1,47 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Retro Terminal Game</title>
-    <style>
-        body {
-            background-color: black;
-            color: green;
-            font-family: "Courier New", Courier, monospace;
-            font-size: 16px;
-            line-height: 1.5;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
-        }
-        #terminal {
-            width: 80%;
-            height: 80%;
-            border: 2px solid green;
-            padding: 20px;
-            overflow-y: auto;
-        }
-        #inputField {
-            width: 100%;
-            background-color: black;
-            color: green;
-            border: none;
-            outline: none;
-            font-family: inherit;
-            font-size: 16px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Broadcast Paradox</title>
+  <style>
+    body {
+      font-family: 'Courier New', Courier, monospace;
+      background-color: black;
+      color: green;
+      padding: 20px;
+    }
+    #terminal {
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      font-size: 18px;
+      max-height: 80vh;
+      overflow-y: auto;
+      border: 1px solid green;
+      padding: 10px;
+    }
+    button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: black;
+      color: green;
+      border: 1px solid green;
+    }
+    button:hover {
+      background-color: green;
+      color: black;
+    }
+  </style>
 </head>
 <body>
-    <div id="terminal">
-        <div id="output"></div>
-        <input type="text" id="inputField" placeholder="Type here...">
-    </div>
+  <h1>The Broadcast Paradox</h1>
+  <div id="terminal"></div>
+  <button onclick="scan()">Scan for Anomalies</button>
 
-    <script src="game.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+  <script>
+    const terminal = document.getElementById("terminal");
+    let uniqueIDs = []; // Array to hold IDs from the CSV file
+
+    // Function to append text to the terminal
+    function logToTerminal(message) {
+      const timestamp = `[${new Date().toLocaleTimeString()}]`;
+      terminal.textContent += `${timestamp} ${message}\n`;
+      terminal.scrollTop = terminal.scrollHeight; // Auto-scroll
+    }
+
+    // Function to load IDs from the CSV file
+    function loadIDs() {
+      Papa.parse("ids.csv", {
+        download: true,
+        header: false,
+        complete: function(results) {
+          uniqueIDs = results.data.map(row => row[0]).filter(id => id); // Get first column
+          logToTerminal(">>> IDs loaded successfully.");
+        },
+        error: function() {
+          logToTerminal("Error loading IDs from ids.csv.");
+        },
+      });
+    }
+
+    // Function to get a random unique ID from the loaded list
+    function getRandomID() {
+      if (uniqueIDs.length === 0) {
+        return "No IDs available.";
+      }
+      return uniqueIDs[Math.floor(Math.random() * uniqueIDs.length)];
+    }
+
+    // Function to simulate scanning
+    function scan() {
+      logToTerminal(">>> INITIATING SCAN...");
+      setTimeout(() => {
+        logToTerminal(">>> CONNECTING TO NETWORK");
+        setTimeout(() => {
+          logToTerminal("Connection established...");
+          setTimeout(() => {
+            logToTerminal(">>> SCANNING FREQUENCY RANGE 88.1-107.9 MHz");
+            const hasAnomaly = Math.random() < 0.3; // 30% chance for anomaly
+            setTimeout(() => {
+              if (hasAnomaly) {
+                logToTerminal("Anomaly Detected!");
+                setTimeout(() => {
+                  logToTerminal(`Unique Broadcast ID: ${getRandomID()}`);
+                }, 1000);
+              } else {
+                logToTerminal("Scan complete. No anomalies detected.");
+              }
+            }, 2000);
+          }, 2000);
+        }, 2000);
+      }, 1000);
+    }
+
+    // Load the IDs from the CSV file on page load
+    window.onload = loadIDs;
+  </script>
 </body>
 </html>
