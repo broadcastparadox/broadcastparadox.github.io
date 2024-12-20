@@ -95,8 +95,8 @@
         setTimeout(() => {
           logToTerminal("Connection established...");
           setTimeout(() => {
-            logToTerminal(">>> SCANNING FREQUENCY RANGE 88.1-107.9 MHz");
-            const hasAnomaly = Math.random() < 0.3; // 30% chance for anomaly
+            logToTerminal(">>> SCANNING ALL LOCAL FREQUENCIES");
+            const hasAnomaly = Math.random() < 0.03; // 30% chance for anomaly
             setTimeout(() => {
               if (hasAnomaly) {
                 logToTerminal("Anomaly Detected!");
@@ -117,7 +117,7 @@
     window.onload = function() {
       loadIDs(); // Load IDs as before
       backgroundMusic.play().catch(() => {
-        logToTerminal(">>> Click anywhere to enable audio.");
+        logToTerminal(">>>Running... Please wait");
       });
 
       // Allow music playback after user interaction if autoplay is blocked
