@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Polygon Token Tracker</title>
+  <style>
+    /* Cyberpunk Hacker Theme */
+    body {
+      font-family: 'Courier New', Courier, monospace;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #00ff99;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px #00ff99, 0 0 20px #00ff99;
+    }
+
+    input, button {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 1em;
+      padding: 10px 15px;
+      margin: 10px;
+      border: 2px solid #00ff99;
+      border-radius: 5px;
+      background-color: #000;
+      color: #00ff99;
+      outline: none;
+    }
+
+    input::placeholder {
+      color: #007f66;
+    }
+
+    button {
+      cursor: pointer;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #00ff99;
+      color: #000;
+    }
+
+    #result {
+      font-size: 1.2em;
+      margin-top: 20px;
+      padding: 10px;
+      width: 80%;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid #00ff99;
+      border-radius: 10px;
+      text-align: left;
+      overflow-y: auto;
+      max-height: 50vh;
+    }
+  </style>
+</head>
+<body>
+  <h1>Polygon Token Tracker</h1>
+  <p>Enter Wallet Address:</p>
+  <input type="text" id="walletAddress" placeholder="0x...">
+  <button onclick="getBalance()">Check Balance</button>
+  <div id="result"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/ethers/dist/ethers.min.js"></script>
+  <script>
+    const tokenAddress = "0x54Cc72D260f4B23091Dba86c0073F3D9B6201886"; // Token contract address
+    const rewardPool = "0x9230Ddfc2B18e9fc86Fc9F8d751726c5bDf5c9d1"; // Reward pool address
+    const provider = new ethers.providers.JsonRpcProvider("https://polygon-rpc.com"); // Polygon mainnet RPC
+
+    const abi = [
+      "function balanceOf(address owner) view returns (uint256)",
+      "function decimals() view returns (uint8)"
+    ];
+
+    async function getBalance() {
+      const walletAddress = document.getElementById("walletAddress").value;
+      const resultDiv = document.getElementById("result");
+
+      if (!ethers.utils.isAddress(walletAddress)) {
+        resultDiv.innerText = "Invalid wallet address.";
+        return;
+      }
+
+      try {
+        const contract = new ethers.Contract(tokenAddress, abi, provider);
+        const decimals = await contract.decimals();
+        const rawBalance = await contract.balanceOf(walletAddress);
+        const formattedBalance = ethers.utils.formatUnits(rawBalance, decimals);
+
+        resultDiv.innerHTML = `
+          <p>Wallet: <strong>${walletAddress}</strong></p>
+          <p>Token Balance: <strong>${formattedBalance}</strong></p>
+          <p>Reward Pool: <strong>${rewardPool}</strong></p>
+        `;
+      } catch (error) {
+        console.error(error);
+        resultDiv.innerText = "Error fetching balance.";
+      }
+    }
+  </script>
+</body>
+</html>
