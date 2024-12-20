@@ -40,52 +40,7 @@
   <div id="terminal"></div>
   <button onclick="scan()">Scan for Anomalies</button>
 
-  <script>
-    const terminal = document.getElementById("terminal");
-
-    // Function to append text to the terminal
-    function logToTerminal(message) {
-      const timestamp = `[${new Date().toLocaleTimeString()}]`;
-      terminal.textContent += `${timestamp} ${message}\n`;
-      terminal.scrollTop = terminal.scrollHeight; // Auto-scroll
-    }
-
-    // List of unique IDs
-    const uniqueIDs = [
-      "ID-8A7F12B3",
-      "ID-4C2E98D7",
-      "ID-B1D4F67A",
-      "ID-3F89AC02",
-      "ID-6D7E2A94",
-      "ID-AF349821",
-    ];
-
-    // Mock commands and their outputs
-    const commands = [
-      { command: "CONNECTING TO NETWORK", output: "Connection established..." },
-      { command: "SCANNING FREQUENCY RANGE 88.1-107.9 MHz", output: "No anomalies detected..." },
-      { command: "DECODING SIGNAL PATTERNS", output: "Signal anomaly detected!" },
-      { command: "IDENTIFYING BROADCAST", output: () => `Unique Broadcast ID: ${getRandomID()}` },
-    ];
-
-    // Function to get a random unique ID from the list
-    function getRandomID() {
-      return uniqueIDs[Math.floor(Math.random() * uniqueIDs.length)];
-    }
-
-    // Function to simulate a scan
-    function scan() {
-      logToTerminal(">>> INITIATING SCAN...");
-      commands.forEach((cmd, index) => {
-        setTimeout(() => {
-          logToTerminal(`>>> ${cmd.command}`);
-          setTimeout(() => {
-            const output = typeof cmd.output === "function" ? cmd.output() : cmd.output;
-            logToTerminal(output);
-          }, 1000);
-        }, index * 2000);
-      });
-    }
-  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+  <script src="game.js"></script>
 </body>
 </html>
