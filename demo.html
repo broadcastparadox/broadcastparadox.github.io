@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Signal Scraper</title>
+    <title>Broadcast Paradox</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <style>
         body {
@@ -88,8 +88,15 @@
     
     <!-- Display Random ID and Anomaly -->
     <div class="id-display" id="id-display">
-        <p>Random ID: <span id="random-id">Loading...</span></p>
+        <p>Random ID: <span id="random-id">None</span></p>
         <p id="anomaly" class="anomaly"></p>
+    </div>
+    
+    <!-- Anomaly List -->
+    <div class="terminal">
+        <h3>Recorded Anomalies</h3>
+        <ul id="anomaly-list"></ul>
+        <p id="anomaly-count">Anomalies Found: 0</p>
     </div>
 
     <script>
@@ -118,8 +125,11 @@
         const countdownTimer = document.getElementById('countdown-timer');
         const randomIdDisplay = document.getElementById('random-id');
         const anomalyText = document.getElementById('anomaly');
+        const anomalyList = document.getElementById('anomaly-list');
+        const anomalyCountText = document.getElementById('anomaly-count');
         
         let uniqueIDs = [];
+        let anomaliesFound = [];
 
         // Load IDs from CSV using PapaParse
         function loadIDs() {
@@ -129,7 +139,6 @@
                 complete: function(results) {
                     uniqueIDs = results.data.map(row => row[0]).filter(id => id); // Get first column
                     logToTerminal(">>> IDs loaded successfully.");
-                    displayRandomID(); // Display random ID once loaded
                 },
                 error: function() {
                     logToTerminal("Error loading IDs from ids.csv.");
@@ -137,22 +146,44 @@
             });
         }
 
-        // Display random ID with 5% chance of anomaly
+        // Function to get a random unique ID from the loaded list
+        function getRandomID() {
+            if (uniqueIDs.length === 0) {
+                return "No IDs available.";
+            }
+            return uniqueIDs[Math.floor(Math.random() * uniqueIDs.length)];
+        }
+
+        // Display Random ID if anomaly is found
         function displayRandomID() {
             if (uniqueIDs.length === 0) {
                 randomIdDisplay.textContent = "No IDs available.";
                 return;
             }
-            
-            let randomID = uniqueIDs[Math.floor(Math.random() * uniqueIDs.length)];
+
+            let randomID = getRandomID();
             randomIdDisplay.textContent = randomID;
             
             // 5% chance of generating an anomaly
             if (Math.random() < 0.05) {
                 anomalyText.textContent = "Anomaly Detected!";
+                // Record the anomaly
+                anomaliesFound.push(randomID);
+                updateAnomalyList();
             } else {
                 anomalyText.textContent = ""; // No anomaly
             }
+        }
+
+        // Update the anomaly list and count
+        function updateAnomalyList() {
+            anomalyList.innerHTML = ''; // Clear current list
+            anomaliesFound.forEach((anomaly, index) => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `Anomaly #${index + 1}: ${anomaly}`;
+                anomalyList.appendChild(listItem);
+            });
+            anomalyCountText.textContent = `Anomalies Found: ${anomaliesFound.length}`;
         }
 
         function updateProgress() {
@@ -166,7 +197,7 @@
                 statusText.textContent = "Decryption Complete. Signal Collected!";
                 updateUpgrades();
                 startButton.disabled = false;
-                displayRandomID(); // Display a new random ID
+                displayRandomID(); // Display a new random ID only if an anomaly occurs
             }
         }
 
@@ -271,3 +302,4 @@
     </script>
 </body>
 </html>
+
