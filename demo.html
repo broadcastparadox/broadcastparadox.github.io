@@ -161,7 +161,7 @@
                 let randomID = getRandomID();
                 randomIdDisplay.textContent = randomID;
                 anomalyText.textContent = "Anomaly Detected!";
-                
+
                 // Record the anomaly
                 anomaliesFound.push(randomID);
                 updateAnomalyList();
@@ -257,33 +257,28 @@
                     updateProgress();
                     updateSecurity();
                 }, decryptionSpeed);
+                autoDecryptButton.disabled = true; // Disable after use
             }
         });
 
-        speedUpgrade.addEventListener('click', () => {
-            if (signals >= speedCost) {
-                signals -= speedCost;
-                decryptionSpeed = Math.max(50, decryptionSpeed - 10);
-                speedCost += 10;
+        autoUpgradeButton.addEventListener('click', () => {
+            if (signals >= 30) {
+                signals -= 30; // Cost of automating upgrades
                 updateUpgrades();
-            }
-        });
-
-        strengthUpgrade.addEventListener('click', () => {
-            if (signals >= strengthCost) {
-                signals -= strengthCost;
-                progressRate += 1;
-                strengthCost += 15;
-                updateUpgrades();
-            }
-        });
-
-        securityUpgrade.addEventListener('click', () => {
-            if (signals >= securityUpgradeCost) {
-                signals -= securityUpgradeCost;
-                securityRate = Math.max(0.0005, securityRate - 0.0005); // Even slower decay
-                securityUpgradeCost += 5; // Slightly reduced increment
-                updateUpgrades();
+                statusText.textContent = "Automating Upgrades...";
+                autoUpgradeInterval = setInterval(() => {
+                    // Automate Speed and Strength Upgrades
+                    if (signals >= speedCost) {
+                        signals -= speedCost;
+                        decryptionSpeed = Math.max(50, decryptionSpeed - 10);
+                    }
+                    if (signals >= strengthCost) {
+                        signals -= strengthCost;
+                        progressRate += 1;
+                    }
+                    updateUpgrades();
+                }, 10000); // Automate every 10 seconds
+                autoUpgradeButton.disabled = true; // Disable after use
             }
         });
 
